@@ -1,0 +1,169 @@
+@import "base";
+@import "compass/css3";
+@import "compass/layout/grid-background";
+
+////////////////////
+// VARIABLES
+////////////////////
+
+//Grid
+$col: 34px;
+$gut: 18px;
+$colA: $col + $gut;
+
+//Colors
+$grey: #D3D1C1;
+$lGreen: #8BB675;
+$dGreen: #6B887B;
+$yellow: #D8CB71;
+$pink: #A8909B;
+$black: #2B2B2B;
+$white: #FFFFFF;
+
+//Fonts
+$font: Helvetica, Arial, sans-serif;
+$fontM: 'NHaasGroteskDSW01-65Md', Helvetica, Arial, sans-serif;
+$fontL: 'NHaasGroteskDSW01-45Lt', Helvetica, Arial, sans-serif;
+$fontT: 'NHaasGroteskDSW01-25Th', Helvetica, Arial, sans-serif;
+$fontI: 'NHaasGroteskDSW01-66MdI', Helvetica, Arial, sans-serif;
+
+//Images
+$sprite: 'sprite.png';
+$sprite2: 'spritex2.png';
+$svgSprite: 'svg-sprite.svg';
+
+////////////////////
+// FUNCTIONS
+////////////////////
+
+@function w($num, $sub){
+	@return $colA * $num - $gut - $sub;
+}
+
+@mixin resp($media) {
+	@if $media == phone {
+		@media only screen and (max-width: 639px) { @content; }
+	}
+		@else if $media == gtPhone {
+		@media only screen and (min-width : 640px) { @content; }
+	}
+		@else if $media == tablet {
+		@media only screen and (min-width : 640px) and (max-width : 959px) { @content; }
+	}
+		@else if $media == gtTablet {
+		@media only screen and (min-width : 960px) { @content; }
+	}
+		@else if $media == ltLaptop {
+		@media only screen and (max-width : 959px) { @content; }
+	}
+		@else if $media == laptop {
+		@media only screen and (min-width : 960px) and (max-width : 1279px) { @content; }
+	}		
+		@else if $media == ltDesktop {
+		@media only screen and (max-width : 1279px) { @content; }
+	}
+		@else if $media == desktop {
+		@media only screen and (min-width : 1280px) { @content; }
+	}
+		@else if $media == highRes {
+		@media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) { @content }
+	}
+};
+/*
+		   Desktop > 1200
+	1200 > Laptop  >  980
+	980  > Tablet  >  768 
+	768  > Phone   >  320
+*/
+
+//Cross Browser Plugins
+//--------------------
+@mixin spin() { &::-webkit-outer-spin-button, &::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; } }
+@mixin ph() { ::-webkit-input-placeholder { @content; } :-moz-placeholder { @content; } ::-moz-placeholder { @content; } :-ms-input-placeholder { @content; } }
+@mixin andph() { &::-webkit-input-placeholder { @content; } &:-moz-placeholder { @content; } &::-moz-placeholder { @content; } &:-ms-input-placeholder { @content; } }
+@mixin sel() { ::-moz-selection { @content; } ::selection { @content; } }
+@mixin op($amount) { opacity: $amount; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity="+($amount*100)+")"; filter: alpha(opacity= + ($amount*100)); }
+@mixin us($var) { -webkit-touch-callout: $var; -webkit-user-select: $var; -khtml-user-select: $var; -moz-user-select: $var; -ms-user-select: $var; user-select: $var; }
+@mixin display() { display: inline-block; zoom: 1; *display: inline; }
+
+//Specific Helper Functions
+//--------------------
+@mixin ul() { margin: 0; padding: 0; list-style: none; 
+	a { text-decoration: none; } 
+	.tablet { display: none; }
+	.mobile { display: none; }
+	@include resp(ltLaptop) { 
+		.tablet { @include display; }
+		.tablet-hide { display: none; } }
+	@include resp(phone) { 
+		.mobile { display: block; }
+		.mobile-hide { display: none; } } }
+@mixin shield() { position: fixed; z-index: 20; top: 0; left: 0; width: 100%; height: 2000px; display: none; }
+@mixin ir() { font: 0/0 serif; text-shadow: none; color: transparent; }
+
+//Loops
+//--------------------
+@mixin icons($icon, $y) {
+	&.icon-#{$icon} { background-position: 0 $y + px; }
+}
+/* 
+$filterList: (search -90) (wish -60) (cart -30);
+@each $values in $filterList {
+	@include func-icons( nth($values, 1), nth($values, 2) );
+}
+*/
+
+///////////////////////////////////////////////////
+// GENERAL
+///////////////////////////////////////////////////
+
+html { color: $black; background-color: $grey; font: 13px/17px $font;
+	&.local:before { content: "Desktop"; width: 70px; height: 20px; position: absolute; top: 2px; left: 2px; background-color: #FAD28D; border: 1px solid #000; @include border-radius(3px); color: #fff; text-align: center; line-height: 20px; @include box-shadow(rgba(#000,0.5) 0px 0px 2px inset); font: 12px/16px $font;
+		@include resp(laptop) { content: "Laptop"; background-color: #1B242D; }
+		@include resp(tablet) { content: "Tablet"; background-color: #AC2B0B; }
+		@include resp(phone) { content: "Phone"; background-color: #448B61; } } }
+
+///////////////////////////////////////////////////
+// COLOR SWATCH
+///////////////////////////////////////////////////
+
+.color-swatch { width: 300px; max-width: 100%;
+	span { @include display; width: 20%; height: 200px; border: 1px solid rgba($black,0.3); @include box-sizing(border-box); }
+	span:first-child { @include border-radius(3px 0 0 3px); }
+	span:last-child { @include border-radius(0 3px 3px 0); }
+	span + span { border-left: none; } }
+.grey { background-color: $grey; }
+.yellow { background-color: $yellow; }
+.light-green { background-color: $lGreen; }
+.green { background-color: $dGreen; }
+.pink { background-color: $pink; }
+
+///////////////////////////////////////////////////
+// CONTAINERS
+///////////////////////////////////////////////////
+
+.full-cont { width: 100%;
+	section { width: 80%; margin: 0 10%; } }
+
+
+///////////////////////////////////////////////////
+// TYPE
+///////////////////////////////////////////////////
+
+h1 { font: 40px/50px $fontM; margin: 10px 0; }
+h2 { font: 30px/40px $fontM; margin: 10px 0; }
+h3 { font: 40px/50px $fontL; margin: 10px 0; }
+h4 { font: 30px/40px $fontL; margin: 10px 0; }
+h5 { font: 40px/50px $fontT; margin: 10px 0; }
+h6 { font: 30px/40px $fontT; margin: 10px 0; }
+a { color: $black; font: 14px/17px $fontI; 
+	&:hover { color: $dGreen; @include single-transition(color, 0.1s, linear); } }
+
+
+///////////////////////////////////////////////////
+// FORMS
+///////////////////////////////////////////////////
+
+input { width: 300px; height: 35px; max-width: 100%; @include border-radius(3px); border: 1px solid rgba($black, 0.3); @include box-sizing(border-box); padding: 0 10px;}
+.error { 
+	p { @include display; background-color: $yellow; border: 1px solid rgba($black, 0.3); padding: 10px 20px; margin: 0; } }
